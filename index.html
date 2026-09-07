@@ -155,6 +155,21 @@
     return CATEGORY_FALLBACK[h % CATEGORY_FALLBACK.length];
   }
 
+  // ponytail: GitHub Pages has no db backend, so this is a fixed snapshot of the Artifact's
+  // real data at deploy time, not a live sync — refresh it by re-copying from the Artifact.
+  const STATIC_SNAPSHOT = [
+    { id: "integrity-survey", title: "청렴도조사 워크숍 발표자료", category: "감사실", status: "진행중", memo: "감사실 방향 초안 작성 중, 케이스카드 캔버스 진행", updatedAt: "2026-09-07T00:00:00.000Z" },
+    { id: "iata-dispatch", title: "싱가포르 IATA 파견 선발 전략", category: "파견", status: "진행중", memo: "11월 파견자 선발 대비 전략 수립 중", updatedAt: "2026-09-07T00:00:01.000Z" },
+    { id: "parking-analysis", title: "주차장 사용현황 분석 회의", category: "감사실", status: "대기", memo: "특정감사 관련 준비자료 작성 중", updatedAt: "2026-09-07T00:00:02.000Z" },
+    { id: "event-report", title: "행사 결과 게시판 보고", category: "행사", status: "대기", memo: "자료 미수령, 근태 안내 다음스텝 작성 예정", updatedAt: "2026-09-07T00:00:03.000Z" },
+    { id: "attendance-survey", title: "근태 규정 공감대 설문", category: "감사실", status: "진행중", memo: "하반기 모의신고훈련 배포 확정, 복무감사 사례 미수령", updatedAt: "2026-09-07T00:00:04.000Z" },
+    { id: "chuseok-letter", title: "추석 청렴레터", category: "감사실", status: "진행중", memo: "3트랙 카피 확정, 하계 한장보고서 참고 PDF 수령 후 1페이지 보고서 작성 예정", updatedAt: "2026-09-07T00:00:05.000Z" },
+    { id: "parking-search-tool", title: "주차장 검색 프로그램", category: "개발", status: "대기", memo: "exe화 보류 중, 데이터 로컬처리 원칙 유지", updatedAt: "2026-09-07T00:00:06.000Z" },
+    { id: "marathon-plan", title: "마라톤 훈련 계획", category: "개인", status: "진행중", memo: "11/22 첫 풀코스 목표, iCloud 캘린더 등록 완료, 로컬 중복 캘린더 삭제 미결", updatedAt: "2026-09-07T00:00:07.000Z" },
+    { id: "parking-audit-script", title: "주차장 감사자료 스크립트", category: "개발", status: "진행중", memo: "run()/run_주차기준() 방향 차이 정리, 버그 수정 진행 중", updatedAt: "2026-09-07T00:00:08.000Z" },
+    { id: "youtube-ai-course", title: "유튜브 AI 활용 10강", category: "콘텐츠", status: "진행중", memo: "커리큘럼 목차·채널 정체성 확정, 제작 진행 중", updatedAt: "2026-09-07T00:00:09.000Z" }
+  ];
+
   let db = null, col = null;
   let tasks = [];
   let activeFilter = null;
@@ -309,10 +324,8 @@
         () => showBanner("실시간 동기화 연결에 문제가 발생했습니다. 새로고침해 주세요.")
       );
     } else {
-      showBanner("저장 기능을 사용할 수 없어 임시 미리보기 모드입니다 (새로고침하면 초기화됨).");
-      tasks = [
-        { id: "demo-1", title: "예시 업무 항목", category: "예시", status: "진행중", memo: "실제 데이터는 DB 연결 시 표시됩니다", updatedAt: new Date().toISOString() }
-      ];
+      showBanner("정적 스냅샷입니다 — 여기서의 수정은 저장되지 않습니다. 실시간 공유 버전은 Artifact 링크를 이용하세요.");
+      tasks = STATIC_SNAPSHOT;
       render();
     }
   }
